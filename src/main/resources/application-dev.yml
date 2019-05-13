@@ -1,0 +1,74 @@
+server:
+  port: 8985
+###数据库配置
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/tvacg?useUnicode=true&characterEncoding=utf-8
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: root
+    moonlight:
+      poolMaximumActiveConnections: 400
+      poolMaximumIdleConnections: 200
+      poolMaximumCheckoutTime: 20000
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  tomcat:
+    uri-encoding: UTF-8
+  servlet:
+    multipart:
+      max-request-size: 2MB #上传文件总的最大值
+      max-file-size: 2MB #单个文件的最大值
+  # 静态文件请求匹配方式
+  mvc:
+    static-path-pattern: /**
+  # 修改默认的静态寻址资源目录 多个使用逗号分隔
+  resources:
+    static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,classpath:/itstyle/,file:E:\Code\JavaCode\4\upload
+logging:
+  level:
+    blacktv:
+      tvacg:
+        database:
+          mapper: DEBUG
+###配置PageHelper
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+  page-size-zero: true
+
+###业务逻辑相关的配置
+tvacg:
+  user:
+    registerEmailTime: 1 #用户注册邮件的有效期,单位小时
+    adminLoginTime: 1 #管理员登录session有效期，单位小时
+    loginTime: 7 #用户登录的jwt有效期,单位天
+    verificationCodeLength: 6 #验证码长
+    updateEmeailKey: updateEmeail #用户修改邮箱在redis中的前缀，后缀是的用户id与验证码
+    updatePasswordKey: updatePassword #用户修改密码在redis中的前缀，后缀是的用户id与验证码
+    updateUsernameKey: updateUsername #用户修改昵称冷却存储在redis中的前缀，后缀是的用户id
+    visitKey: visit #用户当天是否访问过指定资源存储在redis中的前缀，后缀是ip+"_"+资源id
+  jjwt:
+    key: blackTvAndWuanJianBingJiHua #jwt秘钥
+  solr:
+    baseURL: http://localhost:8983/solr/resources
+  page:
+    pageSize: 12 #分页查询页面大小
+  sequence:
+    resources: resourcesId #资源的序列
+  upload:
+    visitPath: /uploads/** #自定义的静态资源url访问方式
+    resourcesCoverPath: E:\Code\JavaCode\4\upload #自定义的静态资源目录，用于文件上传
+    resourcesSeconds: 3600 #资源封面路径在redis里存储的有效时长，单位秒
+    resourceKeyName: resourcesCover #资源封面路径存储在redis里key名称前缀，后缀是的用户id
+    resourceTypeKeyName: resourcesType #资源类型存储在redis中的名称
+  redis:
+    port: 6379 #redis的端口
+    password : 1 #redis的密码，开发环境没密码，写一个长度小于4的就行，逻辑里长度小于4就不加载密码
+
+
